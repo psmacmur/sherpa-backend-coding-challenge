@@ -1,0 +1,231 @@
+openapi: 3.0.1
+info:
+  description: Events management API
+  title: Sherpa° Coding Challenge
+  version: 1.0.0
+servers:
+- url: /
+security:
+- BearerAuth: []
+paths:
+  /events/{eventId}:
+    get:
+      operationId: getEvent
+      parameters:
+      - description: Unique ID of the Event to retrieve
+        explode: false
+        in: path
+        name: eventId
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventDetails'
+          description: A single Event.
+      summary: Get an event by ID
+      tags:
+      - Events
+      x-eov-operation-handler: controllers/EventsController
+  /events:
+    get:
+      description: Retrieve upcoming events. the endpoint accepts the following query
+        parameters "from" - optional, Date, defaults to the current time, only return
+        events after this date "until" - optional, Date, if omitted return all future
+        events
+      operationId: getEvents
+      parameters:
+      - description: optional, Date, defaults to the current time, only return events
+          after this date
+        explode: true
+        in: query
+        name: from
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: optional, Date, if omitted return all future events
+        explode: true
+        in: query
+        name: until
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: Specifies the first event to return
+        explode: true
+        in: query
+        name: cursor
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Limits the number of items on a page
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventList'
+          description: A list of Events.
+      summary: Returns a list of upcoming events.
+      tags:
+      - Events
+      x-eov-operation-handler: controllers/EventsController
+components:
+  schemas:
+    EventSummary:
+      example:
+        date: 2000-01-23T04:56:07.000+00:00
+        attendees:
+        - attendees
+        - attendees
+        organizer:
+          name: name
+          id: 6.027456183070403
+        name: name
+        id: 0.8008281904610115
+        isOutside: true
+      properties:
+        id:
+          description: Unique identifier of event in our system
+          format: int64
+          type: number
+        name:
+          description: Event name
+          type: string
+        date:
+          format: date-time
+          type: string
+        isOutside:
+          type: boolean
+        attendees:
+          description: empty array is fine for first iteration
+          items:
+            type: string
+          type: array
+        organizer:
+          $ref: '#/components/schemas/Organizer'
+      title: Event Summary
+      type: object
+    EventDetails:
+      allOf:
+      - $ref: '#/components/schemas/EventSummary'
+      - type: object
+      description: Rich data about an event
+      example:
+        proofOfVaccineRequired: true
+        weather: '{}'
+        visaRequirements: visaRequirements
+      properties:
+        weather:
+          description: if an event is outside and occuring withing 7 days, call any
+            weather api to get the following details if an event is not outside, or
+            not occuring within 7 days this should be null
+          properties:
+            temperatureInDegreesCelcius:
+              format: float
+              type: number
+            chanceOfRain:
+              description: 0-100
+              format: uint32
+              type: number
+          type: object
+        visaRequirements:
+          description: OPTIONAL - This has been designated a 'nice to to have' if
+            an event is happening in any country other than canada, fetch the visa
+            and proof of vaccination requirements our organizers need the destination
+            would be the country the event is happening in and the source is canada
+            if an event is happening in canada, leave this null
+          type: string
+        proofOfVaccineRequired:
+          type: boolean
+      title: Event Details
+    EventList:
+      example:
+        listItems:
+        - date: 2000-01-23T04:56:07.000+00:00
+          attendees:
+          - attendees
+          - attendees
+          organizer:
+            name: name
+            id: 6.027456183070403
+          name: name
+          id: 0.8008281904610115
+          isOutside: true
+        - date: 2000-01-23T04:56:07.000+00:00
+          attendees:
+          - attendees
+          - attendees
+          organizer:
+            name: name
+            id: 6.027456183070403
+          name: name
+          id: 0.8008281904610115
+          isOutside: true
+        pagination:
+          cursor: 1.4658129805029452
+          next_cursor: 5.637376656633329
+          limit: 5.962133916683182
+      properties:
+        listItems:
+          items:
+            $ref: '#/components/schemas/EventSummary'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      title: Event List
+      type: object
+    Organizer:
+      example:
+        name: name
+        id: 6.027456183070403
+      properties:
+        id:
+          description: Unique identifier of organizer in our system
+          format: int64
+          type: number
+        name:
+          description: Organizer name
+          type: string
+      type: object
+    Pagination:
+      example:
+        cursor: 1.4658129805029452
+        next_cursor: 5.637376656633329
+        limit: 5.962133916683182
+      properties:
+        cursor:
+          description: Index of first item to return
+          format: int64
+          type: number
+        limit:
+          description: Number of items to return in a page
+          format: int64
+          type: number
+        next_cursor:
+          description: Index of the next available item; -1 if no further items
+          format: int64
+          type: number
+      type: object
+  securitySchemes:
+    BearerAuth:
+      bearerFormat: jwt
+      description: 'note: non-oauth scopes are not defined at the securityScheme level'
+      scheme: bearer
+      type: http

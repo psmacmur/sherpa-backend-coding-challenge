@@ -1,0 +1,164 @@
+openapi: 3.0.1
+info:
+  title: Sherpa° Coding Challenge
+  description: Events management API
+  version: 1.0.0
+security:
+  - BearerAuth: []
+paths:
+  /events/{eventId}:
+    get:
+      summary: Get an event by ID
+      operationId: getEvent
+      tags:
+        - "Events"
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          description: Unique ID of the Event to retrieve
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A single Event.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventDetails'
+  /events:
+    get:
+      summary: Returns a list of upcoming events.
+      description: Retrieve upcoming events. the endpoint accepts the following query parameters
+       "from" - optional, Date, defaults to the current time, only return events after this date
+       "until" - optional, Date, if omitted return all future events
+      operationId: getEvents
+      tags:
+        - "Events"
+      parameters:
+        - name: from
+          in: query
+          description: optional, Date, defaults to the current time, only return events after this date
+          schema:
+            type: string
+            format: date-time
+        - name: until
+          in: query
+          description: optional, Date, if omitted return all future events
+          schema:
+            type: string
+            format: date-time
+        - name: cursor
+          in: query
+          description: Specifies the first event to return 
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: Limits the number of items on a page
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of Events.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventList'
+
+components:
+  schemas:
+    EventSummary:
+      title: Event Summary
+      type: object
+      properties:
+        id: 
+          type: number
+          format: int64
+          description: Unique identifier of event in our system
+        name: 
+          type: string
+          description: Event name
+        date: 
+          type: string
+          format: date-time
+        isOutside: 
+          type: boolean
+        attendees: 
+          description: empty array is fine for first iteration
+          type: array
+          items:
+            type: string
+        organizer:
+          $ref: '#/components/schemas/Organizer'
+    EventDetails:
+      title: Event Details
+      description: Rich data about an event
+      allOf:
+      - $ref: '#/components/schemas/EventSummary'
+      - type: object
+      properties:
+        weather:
+          type: object
+          description: if an event is outside and occuring withing 7 days, call any weather api to get the following details
+            if an event is not outside, or not occuring within 7 days this should be null
+          properties:
+            temperatureInDegreesCelcius:
+              type: number
+              format: float
+            chanceOfRain: 
+              type: number
+              format: uint32
+              description: 0-100        
+        visaRequirements:
+          type: string
+          description: OPTIONAL - This has been designated a 'nice to to have'
+            if an event is happening in any country other than canada, fetch the visa and proof of vaccination requirements our organizers need
+            the destination would be the country the event is happening in and the source is canada
+            if an event is happening in canada, leave this null
+        proofOfVaccineRequired:
+          type: boolean
+
+    EventList:
+      title: Event List
+      type: object
+      properties:
+        listItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventSummary'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    Organizer:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+          description: Unique identifier of organizer in our system
+        name:
+          type: string
+          description: Organizer name
+    Pagination:
+      type: object
+      properties:
+        cursor:
+          type: number
+          format: int64
+          description: Index of first item to return
+        limit:
+          type: number
+          format: int64
+          description: Number of items to return in a page
+        next_cursor:
+          type: number
+          format: int64
+          description: Index of the next available item; -1 if no further items
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: jwt
+      description: 'note: non-oauth scopes are not defined at the securityScheme level'

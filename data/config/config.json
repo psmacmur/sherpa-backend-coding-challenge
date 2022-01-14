@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "s3#rpa123",
+    "database": "database_development",
+    "storage": "./myDb.sqlite",
+    "dialect": "sqlite"
+  },
+  "test": {
+    "username": "root",
+    "password": "s3#rpa123",
+    "database": "database_test",
+    "storage": "./myDb.sqlite",
+    "dialect": "sqlite"
+  },
+  "production": {
+    "username": "root",
+    "password": "s3#rpa123",
+    "database": "database_production",
+    "storage": "./myDb.sqlite",
+    "dialect": "sqlite"
+  }
+}

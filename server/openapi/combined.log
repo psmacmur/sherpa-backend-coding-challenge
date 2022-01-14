@@ -1,0 +1,25 @@
+{"level":"info","message":"Express server running","service":"user-service","timestamp":"2022-01-14T00:53:43.814Z"}
+{"level":"info","message":"Express server running","service":"user-service","timestamp":"2022-01-14T01:02:18.343Z"}
+{"level":"error","message":"Express Server failure","service":"user-service","timestamp":"2022-01-14T01:17:49.788Z"}
+{"level":"error","service":"user-service","timestamp":"2022-01-14T01:17:49.795Z"}
+{"level":"error","message":"Express Server failure","service":"user-service","timestamp":"2022-01-14T01:19:03.389Z"}
+{"level":"error","service":"user-service","timestamp":"2022-01-14T01:19:03.396Z"}
+{"level":"error","message":"Express Server failure","service":"user-service","timestamp":"2022-01-14T01:21:11.975Z"}
+{"level":"error","service":"user-service","timestamp":"2022-01-14T01:21:11.981Z"}
+{"level":"error","message":"Express Server failure","service":"user-service","timestamp":"2022-01-14T01:22:45.107Z"}
+{"level":"error","service":"user-service","timestamp":"2022-01-14T01:22:45.113Z"}
+{"level":"error","message":"Express Server failure","service":"user-service","timestamp":"2022-01-14T01:25:13.374Z"}
+{"level":"error","service":"user-service","timestamp":"2022-01-14T01:25:13.381Z"}
+{"level":"info","message":"Express server running","service":"user-service","timestamp":"2022-01-14T01:25:37.735Z"}
+{"level":"info","message":"Express server running","service":"user-service","timestamp":"2022-01-14T01:37:02.743Z"}
+{"level":"info","message":"Express server running","service":"user-service","timestamp":"2022-01-14T01:47:35.155Z"}
+{"level":"error","message":"Express Server failure","service":"user-service","timestamp":"2022-01-14T01:55:18.501Z"}
+{"level":"error","service":"user-service","timestamp":"2022-01-14T01:55:18.509Z"}
+{"level":"error","message":"Express Server failure","service":"user-service","timestamp":"2022-01-14T01:55:50.867Z"}
+{"level":"error","service":"user-service","timestamp":"2022-01-14T01:55:50.874Z"}
+{"level":"error","message":"Express Server failure","service":"user-service","timestamp":"2022-01-14T01:58:08.668Z"}
+{"level":"error","service":"user-service","timestamp":"2022-01-14T01:58:08.675Z"}
+{"level":"info","message":"Express server running","service":"user-service","timestamp":"2022-01-14T01:59:13.740Z"}
+{"level":"info","message":"Express server running","service":"user-service","timestamp":"2022-01-14T02:02:55.477Z"}
+{"level":"info","message":"Express server running","service":"user-service","timestamp":"2022-01-14T02:05:46.337Z"}
+{"level":"info","message":"Express server running","service":"user-service","timestamp":"2022-01-14T02:11:48.678Z"}
