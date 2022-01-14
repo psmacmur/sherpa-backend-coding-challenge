@@ -32,7 +32,6 @@ const constructApiEvent = (dbEvent, dbOrganizer, includeDetails = true) => ({
 const getEvent = ({ eventId }) => new Promise(
   (resolve, reject) => {
     try {
-      // TODO: pull organizer
       // call weather
       console.log(`getEvents(${eventId})`);
       db.Event.findAll({
@@ -72,9 +71,7 @@ const getEvents = ({
 }) => new Promise(
   (resolve, reject) => {
     try {
-      // TODO: pull organizers
       // paginate
-      // call weather
       console.log('getEvents');
       db.Event.findAll().then((events) => db.Organizer.findAll({
         where: {

@@ -12,7 +12,6 @@ Features:
 
 
 Missing/TODO
-- Fetch Organizers
 - Call weather API
 - Directory structure needs cleanup
 - Manual copy of myDb.sqlite current required
