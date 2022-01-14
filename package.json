@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "cd server/openapi && npm start",
     "test": "jest",
     "generateData": "node utils/getEventJson.js > data/data.json",
     "generateApi": "openapi-generator-cli generate -i docs/openapi.yaml -g nodejs-express-server -o server/openapi --additional-properties=serverPort=4040,supportsES6=true,npmVersion=6.14.9,withInterfaces=true",
@@ -16,7 +16,8 @@
     "createAssociations": "cd data && sequelize-cli migration:generate --name add-associations",
     "createSeed": "cd data && sequelize-cli seed:generate --name demo-events",
     "seeds": "cd data && sequelize-cli db:seed:all",
-    "undoSeeds": "cd data && sequelize-cli db:seed:undo"
+    "undoSeeds": "cd data && sequelize-cli db:seed:undo",
+    "deployDatabase": "cp -f data/myDb.sqlite server/openapi/"
   },
   "keywords": [],
   "author": "",

@@ -12,6 +12,8 @@ Features:
 
 
 Missing/TODO
+- Filter by dates
+- Pagination
 - Call weather API
 - Directory structure needs cleanup
 - Manual copy of myDb.sqlite current required

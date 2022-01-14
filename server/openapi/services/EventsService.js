@@ -71,9 +71,19 @@ const getEvents = ({
 }) => new Promise(
   (resolve, reject) => {
     try {
-      // paginate
+      // TODO: paginate
       console.log('getEvents');
-      db.Event.findAll().then((events) => db.Organizer.findAll({
+      const dateFilter = {
+        date: {
+          [db.Sequelize.Op.gt]: from || Date(),
+        },
+      };
+      if (until) {
+        dateFilter.date[db.Sequelize.Op.lte] = until;
+      }
+      db.Event.findAll({
+        where: dateFilter,
+      }).then((events) => db.Organizer.findAll({
         where: {
           id: {
             [db.Sequelize.Op.or]: events.map((e) => e.OrganizerId),
