@@ -4,6 +4,26 @@ const Service = require('./Service');
 const db = require('../../../data/models');
 
 /**
+ * Map database rows to an Event API Schema
+ * @param {Event} dbEvent Events table row
+ * @param {*} dbOrganizer Organizers table row
+ * @returns Event
+ */
+const constructApiEvent = (dbEvent, dbOrganizer, includeDetails = true) => ({
+  id: dbEvent.id,
+  name: dbEvent.name,
+  date: dbEvent.date,
+  isOutside: dbEvent.isOutside,
+  attendees: includeDetails ? [] : undefined, // TODO!
+  visaRequirements: includeDetails ? dbEvent.visaRequirements : undefined,
+  proofOfVaccinationRequired: includeDetails ? dbEvent.proofOfVaccinationRequired : undefined,
+  organizer: {
+    id: dbOrganizer.id,
+    name: dbOrganizer.name,
+  },
+});
+
+/**
 * Get an event by ID
 *
 * eventId Long Unique ID of the Event to retrieve
@@ -19,7 +39,13 @@ const getEvent = ({ eventId }) => new Promise(
         where: {
           id: eventId,
         },
-      }).then((events) => resolve(Service.successResponse(events[0])));
+      }).then((events) => {
+        db.Organizer.findAll({
+          where: {
+            id: events[0].OrganizerId,
+          },
+        }).then((organizers) => resolve(Service.successResponse(constructApiEvent(events[0], organizers[0]))));
+      });
     } catch (e) {
       reject(Service.rejectResponse(
         e.message || 'Invalid input',
@@ -28,6 +54,7 @@ const getEvent = ({ eventId }) => new Promise(
     }
   },
 );
+
 /**
 * Returns a list of upcoming events.
 * Retrieve upcoming events. the endpoint accepts the following query parameters \"from\" - optional,
@@ -49,7 +76,9 @@ const getEvents = ({
       // paginate
       // call weather
       console.log('getEvents');
-      db.Event.findAll().then((events) => resolve(Service.successResponse(events))).catch((err) => {
+      db.Event.findAll().then((events) => resolve(Service.successResponse(events.map((event) => constructApiEvent(event, {
+        id: event.OrganizerId,
+      }, false))))).catch((err) => {
         console.log(err);
         reject(err);
       });
