@@ -6,17 +6,16 @@ Features:
     - Data loaded using Sequelize migrations & seeders (see scripts in /package.json)
 - OpenAPI 3.0 spec in docs/openapi.yaml
 - Swagger UI:  
-1. From `/server/openapi/`, run `npm start`
+1. Run `npm start`
 1. Browse to [localhost:4040/api-docs](http://localhost:4040/api-docs)
 1. Try it out.  Any text will pass as the token.
 
 
 Missing/TODO
-- Filter by dates
-- Pagination
+- Pagination: next_cursor isn't fully implemented
 - Call weather API
 - Directory structure needs cleanup
-- Manual copy of myDb.sqlite current required
+- Manual copy of myDb.sqlite current required after migrations (`npm run deployDatabase`)
 - TypeScript. openapi-generator-cli doesn't have a server generator for TypeScript, so is currently es6
 - Tests
 

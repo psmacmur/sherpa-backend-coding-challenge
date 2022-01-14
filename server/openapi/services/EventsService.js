@@ -71,26 +71,44 @@ const getEvents = ({
 }) => new Promise(
   (resolve, reject) => {
     try {
-      // TODO: paginate
       console.log('getEvents');
-      const dateFilter = {
+
+      const filter = {
         date: {
           [db.Sequelize.Op.gt]: from || Date(),
         },
       };
       if (until) {
-        dateFilter.date[db.Sequelize.Op.lte] = until;
+        filter.date[db.Sequelize.Op.lte] = until;
       }
-      db.Event.findAll({
-        where: dateFilter,
-      }).then((events) => db.Organizer.findAll({
+
+      // paginate
+      const params = {
+        where: filter,
+        order: [['date', 'ASC']], // sort by date so filter & paging make some sense
+        offset: cursor || 0,
+      };
+      if (limit) {
+        params.limit = limit;
+      }
+
+      // TODO: compute next_cursor
+
+      db.Event.findAll(params).then((events) => db.Organizer.findAll({
         where: {
           id: {
             [db.Sequelize.Op.or]: events.map((e) => e.OrganizerId),
           },
         },
-      }).then((organizers) => resolve(Service.successResponse(events.map((event) => constructApiEvent(event,
-        organizers.find((o) => o.id === event.OrganizerId), false)))))).catch((err) => {
+      }).then((organizers) => resolve(Service.successResponse({
+        listItems: events.map((event) => constructApiEvent(event,
+          organizers.find((o) => o.id === event.OrganizerId), false)),
+        pagination: {
+          cursor,
+          limit,
+          next_cursor: cursor + limit,
+        },
+      })))).catch((err) => {
         console.log(err);
         reject(err);
       });
