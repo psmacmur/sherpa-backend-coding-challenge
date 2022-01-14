@@ -1,5 +1,27 @@
 # Sherpa° Coding Challenge
 
+This repo represents my WIP attempt at the Sherpa BE coding challenge.
+Features:
+- Sequelize ORM
+    - Data loaded using Sequelize migrations & seeders (see scripts in /package.json)
+- OpenAPI 3.0 spec in docs/openapi.yaml
+- Swagger UI:  
+1. From `/server/openapi/`, run `npm start`
+1. Browse to [localhost:4040/api-docs](http://localhost:4040/api-docs)
+1. Try it out.  Any text will pass as the token.
+
+
+Missing/TODO
+- Fetch Organizers
+- Call weather API
+- Directory structure needs cleanup
+- Manual copy of myDb.sqlite current required
+- TypeScript. openapi-generator-cli doesn't have a server generator for TypeScript, so is currently es6
+- Tests
+
+--- 
+Original README Below
+---
 ## Introduction
 
 Hi! If you're reading this then it's because you're in the interview process with us at sherpa° and have been invited to

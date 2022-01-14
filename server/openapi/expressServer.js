@@ -47,12 +47,6 @@ class ExpressServer {
       res.status(200);
       res.json(req.query);
     });
-    // const validator = OpenApiValidator.middleware({
-    //   apiSpec: this.openApiPath,
-    //   operationHandlers: path.join(__dirname),
-    //   fileUploader: { dest: config.FILE_UPLOAD_PATH },
-    // });
-    // this.app.use(validator);
   }
 
   launch() {
@@ -71,12 +65,6 @@ class ExpressServer {
             errors: err.errors || '',
           });
         });
-        // const connection = new Sequelize('db', 'user', 'pass', {
-        //   host: 'localhost',
-        //   dialect: 'sqlite',
-        //   storage: '../data/myDb.sqlite', // 'db.sqlite',
-        //   operatorsAliases: false,
-        // });
 
         db.sequelize
           .authenticate()
