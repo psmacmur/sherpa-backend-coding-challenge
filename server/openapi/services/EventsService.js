@@ -76,9 +76,14 @@ const getEvents = ({
       // paginate
       // call weather
       console.log('getEvents');
-      db.Event.findAll().then((events) => resolve(Service.successResponse(events.map((event) => constructApiEvent(event, {
-        id: event.OrganizerId,
-      }, false))))).catch((err) => {
+      db.Event.findAll().then((events) => db.Organizer.findAll({
+        where: {
+          id: {
+            [db.Sequelize.Op.or]: events.map((e) => e.OrganizerId),
+          },
+        },
+      }).then((organizers) => resolve(Service.successResponse(events.map((event) => constructApiEvent(event,
+        organizers.find((o) => o.id === event.OrganizerId), false)))))).catch((err) => {
         console.log(err);
         reject(err);
       });
